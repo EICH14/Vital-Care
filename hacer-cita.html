@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+     <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formulario de Citas</title>
+  <link rel="shortcut icon" type="image/x-icon" href="vital.ico">
+  <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/templatemo.css">
+  <link rel="stylesheet" href="assets/css/custom.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
+  <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+  
+</head>
+<body>
+
+  <!-- Top Nav -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+  <div class="container text-light">
+    <div class="w-100 d-flex justify-content-between">
+      <div>
+        <i class="fa fa-envelope mx-2"></i>
+        <a class="navbar-sm-brand text-light text-decoration-none" href="mailto:info@company.com">Caja@gmail.com</a>
+        <i class="fa fa-phone mx-2"></i>
+        <a class="navbar-sm-brand text-light text-decoration-none" href="tel:010-020-0340">+507 367-4578</a>
+      </div>
+      <div>
+        <a class="text-light" href="#"><i class="fab fa-facebook-f fa-sm fa-fw me-2"></i></a>
+        <a class="text-light" href="#"><i class="fab fa-instagram fa-sm fa-fw me-2"></i></a>
+        <a class="text-light" href="#"><i class="fab fa-twitter fa-sm fa-fw me-2"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Nav -->
+<nav class="navbar navbar-expand-lg navbar-light shadow">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="navbar-brand text-success logo h1 align-self-center" href="home.html">Vital care</a>
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between" id="templatemo_main_nav">
+      <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
+        <li class="nav-item"><a class="nav-link" href="home.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contacto</a></li>
+        <li class="nav-item"><a class="nav-link" href="ver-citas.html">Ver Citas</a></li>
+        <li class="nav-item"><a class="nav-link" href="hacer-cita.html">Hacer Citas</a></li>
+        <li class="nav-item"><a class="nav-link" onclick="cerrarSesion()">Cerrar Sesión</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<script>
+  function cerrarSesion() {
+    localStorage.removeItem("usuarioActual");
+    window.location.href = "index.html";
+  }
+</script>
+
+
+<div class="container">
+  <h2 class="my-4">Registrar Nueva Cita</h2>
+  <form id="formCita">
+    <!-- Datos personales -->
+    <div class="form-group">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="apellido">Apellido:</label>
+      <input type="text" id="apellido" name="apellido" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+  <label for="cedula">Cédula:</label>
+  <input type="text" id="cedula" name="cedula" class="form-control" required>
+  <small id="errorCedula" style="color: red; display: none;"></small>
+</div>
+
+<script>
+  const cedulaInput = document.getElementById("cedula");
+  const errorCedula = document.getElementById("errorCedula");
+
+  function validarCedulaConGuiones(cedula) {
+    cedula = cedula.trim().toUpperCase();
+
+    // Cédula nacional con guiones: 1 dígito - 4 dígitos - 4 dígitos
+    const regexNacional = /^[1-9]-\d{4}-\d{4}$/;
+
+    // Cédula extranjera con guiones: E-1-1234-5678
+    const regexExtranjera = /^E-\d-\d{4}-\d{4}$/;
+
+    return regexNacional.test(cedula) || regexExtranjera.test(cedula);
+  }
+
+  cedulaInput.addEventListener("input", () => {
+    const valor = cedulaInput.value;
+
+    if (valor === "") {
+      errorCedula.style.display = "none";
+      cedulaInput.setCustomValidity("");
+      return;
+    }
+
+    if (validarCedulaConGuiones(valor)) {
+      errorCedula.style.display = "none";
+      cedulaInput.setCustomValidity("");
+    } else {
+      errorCedula.textContent = "Use - y Complete con 0 si usted tiene menos números. Ejemplo nacional: 8-4234-5678 o extranjero: E-1-1234-5678";
+      errorCedula.style.display = "block";
+      cedulaInput.setCustomValidity("Complete con 0");
+    }
+  });
+</script>
+
+
+
+    <!-- Ciudad y Corregimiento -->
+    <div class="form-group">
+      <label for="ciudad">Su Ciudad:</label>
+      <select id="ciudad" name="ciudad" class="form-control" required>
+        <option value="">Seleccione la ciudad</option>
+        <option value="Panamá Capital">Panamá Capital</option>
+        <!-- Puedes añadir más ciudades -->
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="corregimiento">Su Corregimiento:</label>
+      <select id="corregimiento" name="corregimiento" class="form-control" required>
+        <option value="">Seleccione su corregimiento</option>
+        <option value="Ancón">Ancón</option>
+        <option value="Betania">Betania</option>
+        <option value="Bella Vista">Bella Vista</option>
+        <option value="Calidonia">Calidonia</option>
+        <option value="Chilibre">Chilibre</option>
+        <option value="Juan Díaz">Juan Díaz</option>
+        <option value="Las Cumbres">Las Cumbres</option>
+      </select>
+    </div>
+<br>
+    <!-- Hospital, Especialidad, Médico -->
+    <div class="form-group">
+      <label for="hospital">Escoge el Hospital donde se desea atender:</label>
+      <select id="hospital" name="hospital" class="form-control" required>
+        <option value="">Seleccione el Centro Hospitalario</option>
+        <option value="San Miguel Arcangel">San Miguel Arcangel</option>
+        <option value="Hospital Santo Tomás">Hospital Santo Tomás</option>
+        <option value="Hospital Nacional">Hospital Nacional</option>
+        <option value="Hospital Nacional de Panamá">Hospital Nacional de Panamá</option>
+        <option value="Hospital Nacional Arnulfo Arias Madrid">Hospital Nacional Arnulfo Arias Madrid</option>
+        <option value="Hospital de Especialidades Pediátricas">Hospital de Especialidades Pediátricas</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="especialidad">Especialidad:</label>
+      <select id="especialidad" name="especialidad" class="form-control" required>
+        <option value="">Seleccione especialidad</option>
+        <option value="Pediatría">Pediatría</option>
+        <option value="Cardiología">Cardiología</option>
+        <option value="Dermatología">Dermatología</option>
+        <option value="Neurología">Neurología</option>
+        <option value="Medicina General">Medicina General</option>
+        <option value="Traumatología">Traumatología</option>
+        <option value="Ginecología">Ginecología</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="doctor">Seleccione Doctor (Opcional):</label>
+      <select id="doctor" name="doctor" class="form-control">
+        <option value="">No seleccionar</option>
+        <!-- Opciones se llenarán dinámicamente -->
+      </select>
+    </div>
+
+    <!-- Fecha y Hora -->
+    <div class="form-group">
+      <label for="fecha">Fecha de la cita:</label>
+      <input type="date" id="fecha" name="fecha" class="form-control" min="" required>
+    </div>
+
+    <div class="form-group">
+      <label for="hora">Seleccione la hora de la cita:</label>
+      <select id="hora" name="hora" class="form-control" required>
+        <option value="">Seleccione la hora</option>
+        <option value="8:00">8:00 AM</option>
+        <option value="10:00">10:00 AM</option>
+        <option value="14:00">2:00 PM</option>
+        <option value="16:00">4:00 PM</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="salon">Número de salón:</label>
+      <input type="text" id="salon" name="salon" class="form-control" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="doctorAsignado">Doctor asignado:</label>
+      <input type="text" id="doctorAsignado" name="doctorAsignado" class="form-control" readonly>
+    </div>
+
+    <div class="form-group">
+      <button type="button" onclick="asignarDoctorYSalon()" class="btn btn-secondary">Asignar Doctor y Salón</button>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Confirmar Cita</button>
+    </div>
+
+    <div id="msgCita" class="mt-3"></div>
+  </form>
+</div>
+
+<script>
+  // Fecha mínima para no elegir fecha pasada
+  document.getElementById("fecha").min = new Date().toISOString().split("T")[0];
+
+  const hospitalSelect = document.getElementById("hospital");
+  const especialidadSelect = document.getElementById("especialidad");
+  const doctorSelect = document.getElementById("doctor");
+  const horaSelect = document.getElementById("hora");
+  const salonInput = document.getElementById("salon");
+  const doctorAsignadoInput = document.getElementById("doctorAsignado");
+  const formCita = document.getElementById("formCita");
+  const msgCita = document.getElementById("msgCita");
+
+  // Datos de hospitales, especialidades, doctores y horarios con salones
+  const data = {
+    "San Miguel Arcangel": {
+      "Pediatría": [
+        { nombre: "Dra. Gómez", horarios: { "8:00": "Salón 101", "10:00": "Salón 105" } },
+        { nombre: "Dr. Martínez", horarios: { "14:00": "Salón 103", "16:00": "Salón 104" } }
+      ],
+      "Cardiología": [
+        { nombre: "Dr. Pérez", horarios: { "8:00": "Salón 102", "14:00": "Salón 102" } }
+      ],
+      "Dermatología": [
+        { nombre: "Dra. López", horarios: { "10:00": "Salón 106", "16:00": "Salón 107" } }
+      ]
+    },
+    "Hospital Santo Tomás": {
+      "Medicina General": [
+        { nombre: "Dr. Sánchez", horarios: { "8:00": "Salón 201", "10:00": "Salón 202" } },
+        { nombre: "Dra. Rivera", horarios: { "14:00": "Salón 203", "16:00": "Salón 204" } }
+      ],
+      "Neurología": [
+        { nombre: "Dr. Ramírez", horarios: { "8:00": "Salón 205", "14:00": "Salón 206" } }
+      ]
+    },
+    "Hospital Nacional": {
+      "Traumatología": [
+        { nombre: "Dr. Torres", horarios: { "10:00": "Salón 301", "16:00": "Salón 302" } }
+      ],
+      "Pediatría": [
+        { nombre: "Dra. Fernández", horarios: { "8:00": "Salón 303", "14:00": "Salón 304" } }
+      ]
+    },
+    "Hospital Nacional de Panamá": {
+      "Cardiología": [
+        { nombre: "Dr. Vargas", horarios: { "8:00": "Salón 401", "16:00": "Salón 402" } }
+      ],
+      "Medicina General": [
+        { nombre: "Dra. Castillo", horarios: { "10:00": "Salón 403", "14:00": "Salón 404" } }
+      ]
+    },
+    "Hospital Nacional Arnulfo Arias Madrid": {
+      "Ginecología": [
+        { nombre: "Dra. Morales", horarios: { "8:00": "Salón 501", "10:00": "Salón 502" } }
+      ],
+      "Dermatología": [
+        { nombre: "Dr. Herrera", horarios: { "14:00": "Salón 503", "16:00": "Salón 504" } }
+      ]
+    },
+    "Hospital de Especialidades Pediátricas": {
+      "Pediatría": [
+        { nombre: "Dra. Méndez", horarios: { "8:00": "Salón 601", "10:00": "Salón 602" } },
+        { nombre: "Dr. Rojas", horarios: { "14:00": "Salón 603", "16:00": "Salón 604" } }
+      ]
+    }
+  };
+
+  // Actualiza la lista de doctores según hospital y especialidad
+  function actualizarDoctores() {
+    const hospital = hospitalSelect.value;
+    const especialidad = especialidadSelect.value;
+
+    doctorSelect.innerHTML = '<option value="">No seleccionar</option>';
+
+    if (hospital && especialidad && data[hospital] && data[hospital][especialidad]) {
+      data[hospital][especialidad].forEach(doc => {
+        const option = document.createElement("option");
+        option.value = doc.nombre;
+        option.textContent = doc.nombre;
+        doctorSelect.appendChild(option);
+      });
+    }
+    // Limpiar campos relacionados
+    doctorAsignadoInput.value = "";
+    salonInput.value = "";
+    horaSelect.value = "";
+  }
+
+  // Al elegir doctor opcional, llena hora y salón según disponibilidad del doctor
+  function alSeleccionarDoctor() {
+    const hospital = hospitalSelect.value;
+    const especialidad = especialidadSelect.value;
+    const doctorNombre = doctorSelect.value;
+
+    if (!hospital || !especialidad || !doctorNombre) {
+      doctorAsignadoInput.value = "";
+      salonInput.value = "";
+      horaSelect.value = "";
+      return;
+    }
+
+    const doctorData = data[hospital][especialidad].find(doc => doc.nombre === doctorNombre);
+
+    if (doctorData) {
+      // Si el doctor tiene más de un horario, elige el primero disponible para asignar hora y salón
+      const horarios = Object.entries(doctorData.horarios);
+      if (horarios.length > 0) {
+        const [hora, salon] = horarios[0];
+        horaSelect.value = hora;
+        salonInput.value = salon;
+        doctorAsignadoInput.value = doctorNombre;
+      }
+    }
+  }
+
+  // Asignar doctor y salón si no se eligió doctor opcional
+  function asignarDoctorYSalon() {
+    if (doctorSelect.value) {
+      alSeleccionarDoctor();
+      return;
+    }
+
+    const hospital = hospitalSelect.value;
+    const especialidad = especialidadSelect.value;
+    const hora = horaSelect.value;
+
+    if (!hospital || !especialidad || !hora) {
+      alert("Por favor selecciona hospital, especialidad y hora.");
+      return;
+    }
+
+    const doctores = data[hospital]?.[especialidad];
+    if (!doctores) {
+      alert("No hay doctores disponibles para la selección.");
+      return;
+    }
+
+    // Buscar doctor disponible en la hora seleccionada
+    const doctorDisponible = doctores.find(doc => doc.horarios[hora]);
+
+    if (!doctorDisponible) {
+      alert("No hay doctor disponible en esa hora. Por favor elija otra hora.");
+      return;
+    }
+
+    doctorAsignadoInput.value = doctorDisponible.nombre;
+    salonInput.value = doctorDisponible.horarios[hora];
+  }
+
+  // Eventos para actualizar doctores y campos
+  hospitalSelect.addEventListener("change", actualizarDoctores);
+  especialidadSelect.addEventListener("change", actualizarDoctores);
+  doctorSelect.addEventListener("change", alSeleccionarDoctor);
+
+  // Limpiar salón si cambia hora y no hay doctor opcional seleccionado
+  horaSelect.addEventListener("change", () => {
+    if (!doctorSelect.value) {
+      salonInput.value = "";
+      doctorAsignadoInput.value = "";
+    }
+  });
+
+  // Guardar datos en localStorage al enviar formulario
+  formCita.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!doctorAsignadoInput.value || !salonInput.value) {
+      alert("Por favor asigna un doctor y salón antes de confirmar.");
+      return;
+    }
+
+    const cita = {
+      nombre: document.getElementById("nombre").value,
+      apellido: document.getElementById("apellido").value,
+      cedula: document.getElementById("cedula").value,
+      ciudad: document.getElementById("ciudad").value,
+      corregimiento: document.getElementById("corregimiento").value,
+      hospital: hospitalSelect.value,
+      especialidad: especialidadSelect.value,
+      doctorAsignado: doctorAsignadoInput.value,
+      salon: salonInput.value,
+      fecha: document.getElementById("fecha").value,
+      hora: horaSelect.value,
+      fechaReserva: new Date().toLocaleString()
+    };
+
+    const citas = JSON.parse(localStorage.getItem("citas") || "[]");
+    citas.push(cita);
+    localStorage.setItem("citas", JSON.stringify(citas));
+
+    msgCita.textContent = "¡Cita agendada exitosamente!";
+    formCita.reset();
+    doctorSelect.innerHTML = '<option value="">No seleccionar</option>';
+    doctorAsignadoInput.value = "";
+    salonInput.value = "";
+  });
+</script>
+
+<footer class="bg-dark" id="tempaltemo_footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 pt-5">
+        <h2 class="h2 text-success border-bottom pb-3 border-light logo">VitalCare</h2>
+        <ul class="list-unstyled text-light footer-link-list">
+          <li><i class="fa fa-phone fa-fw"></i> <a class="text-decoration-none">+507 367-4578</a></li>
+          <li><i class="fa fa-envelope fa-fw"></i> <a class="text-decoration-none" href="mailto:caja@gmail.com">Caja@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 pt-5">
+        <h2 class="h2 text-light border-bottom pb-3 border-light">Páginas</h2>
+        <ul class="list-unstyled text-light footer-link-list">
+          <li><a class="text-decoration-none" href="home.html">Inicio</a></li>
+          <li><a class="text-decoration-none" href="hacer-cita.html">Citas</a></li>
+          <li><a class="text-decoration-none" href="#">Nosotros</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4 pt-5">
+        <h2 class="h2 text-light border-bottom pb-3 border-light">Guía de uso</h2>
+        <img src="doctor1.svg" alt="Guía" />
+        <ul class="list-unstyled text-light footer-link-list">¿Descargar la guía de uso?</ul>
+      </div>
+    </div>
+    <div class="row text-light mb-4">
+      <div class="col-12 mb-3"><div class="w-100 my-3 border-top border-light"></div></div>
+      <div class="col-auto me-auto">
+        <ul class="list-inline text-left footer-icons">
+          <li class="list-inline-item border border-light rounded-circle text-center"><a class="text-light text-decoration-none" href="#"><i class="fab fa-facebook-f fa-lg fa-fw"></i></a></li>
+          <li class="list-inline-item border border-light rounded-circle text-center"><a class="text-light text-decoration-none" href="#"><i class="fab fa-instagram fa-lg fa-fw"></i></a></li>
+          <li class="list-inline-item border border-light rounded-circle text-center"><a class="text-light text-decoration-none" href="#"><i class="fab fa-twitter fa-lg fa-fw"></i></a></li>
+        </ul>
+      </div>
+      <div class="col-auto">
+        <div class="input-group mb-2">
+          <div onclick="showAlert()" class="input-group-text btn-success text-light">Gracias por visitar!!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w-100 bg-black py-3">
+    <div class="container">
+      <div class="row pt-2">
+        <div class="col-12">
+          <p class="text-left text-light">Copyright &copy; 2024 VitalCare</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function showAlert() {
+    alert("¡Gracias por visitarnos! :)");
+  }
+</script>
+
+
+<script src="assets/js/jquery-1.11.0.min.js"></script>
+<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/templatemo.js"></script>
+<script src="assets/js/custom.js"></script>
+
+
+</body>
+</html>
